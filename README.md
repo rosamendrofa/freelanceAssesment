@@ -23,3 +23,8 @@ Step Execute
 7. Deleted new book 
 <img width="829" alt="image" src="https://github.com/rosamendrofa/freelanceAssesment/assets/59732347/5117cdbe-cf66-403d-8516-019bcb33ce77">
 
+
+
+RESULT
+<img width="723" alt="image" src="https://github.com/rosamendrofa/freelanceAssesment/assets/59732347/0c390c02-083f-4593-b675-e2b332b7b5e7">
+
