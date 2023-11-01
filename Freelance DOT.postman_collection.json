@@ -1,0 +1,402 @@
+{
+	"info": {
+		"_postman_id": "bf8c3f7f-eeaa-4555-b083-d04a909ce86e",
+		"name": "Freelance DOT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19305845",
+		"_collection_link": "https://grey-station-623847.postman.co/workspace/My-Workspace~edfa7c06-976f-447c-8325-bd6b276c3a19/collection/19305845-bf8c3f7f-eeaa-4555-b083-d04a909ce86e?action=share&source=collection_link&creator=19305845"
+	},
+	"item": [
+		{
+			"name": "Create User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonData = pm.response.json()",
+							"let userID = jsonData.userID;",
+							"pm.environment.set(\"userID\", userID);",
+							"",
+							"",
+							"pm.test(\"Verify status code 201 and Response Body have Correct Attribute\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    pm.response.to.have.status(201);",
+							"    pm.expect(responseJson).to.haveOwnProperty('userID');",
+							"    pm.expect(responseJson).to.haveOwnProperty('username');",
+							"",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const allCapsAlpha = [...\"ABCDEFGHIJKLMNOPQRSTUVWXYZ\"];",
+							"const allLowerAlpha = [...\"abcdefghijklmnopqrstuvwxyz\"];",
+							"const allNumbers = [...\"0123456789\"];",
+							"const allSpecialChars = [...\"-/|_.,:;[](){}?<>@#$%^&*\"]",
+							"",
+							"const allLetters = [...allCapsAlpha, ...allLowerAlpha];",
+							"const alphanumeric = [...allCapsAlpha, ...allNumbers, ...allLowerAlpha];",
+							"const numericSpecial = [...allNumbers, ...allSpecialChars]",
+							"",
+							"const generator = (base, len) => {",
+							"    return [...Array(len)]",
+							"        .map(i => base[Math.random() * base.length | 0])",
+							"        .join('');",
+							"};",
+							"",
+							"function randomAlphanumeric(min, max) {",
+							"    return generator(alphanumeric, Math.floor(Math.random() * (max - min + 1) + min))",
+							"}",
+							"",
+							"function randomAlphabet(min, max) {",
+							"    return generator(allLetters, Math.floor(Math.random() * (max - min + 1) + min))",
+							"}",
+							"",
+							"function randomNumeric(min, max) {",
+							"    return generator(allNumbers, Math.floor(Math.random() * (max - min + 1) + min))",
+							"}",
+							"",
+							"function randomNumericSpecialChars(min, max) {",
+							"    return generator(numericSpecial, Math.floor(Math.random() * (max - min + 1) + min))",
+							"}",
+							"",
+							"pm.environment.set('userName',randomAlphabet(5, 5)+randomNumeric(2,2));",
+							"pm.environment.set('password','P'+randomAlphabet(9, 9)+randomNumeric(9,9)+randomNumericSpecialChars(9,9))",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"userName\": \"{{userName}}\",\n  \"password\": \"{{password}}!\"\n}"
+				},
+				"url": {
+					"raw": "https://bookstore.toolsqa.com/Account/v1/User",
+					"protocol": "https",
+					"host": [
+						"bookstore",
+						"toolsqa",
+						"com"
+					],
+					"path": [
+						"Account",
+						"v1",
+						"User"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();",
+							"pm.environment.set('token', response.token);",
+							"",
+							"pm.test(\"Verify status code 200 and Response Body have Correct Value\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    pm.response.to.have.status(200);",
+							"    pm.expect(responseJson).to.haveOwnProperty('token');",
+							"    pm.expect(responseJson).to.haveOwnProperty('expires');",
+							"    pm.expect(responseJson).to.haveOwnProperty('status');",
+							"    pm.expect(responseJson).to.haveOwnProperty('result');",
+							"    pm.expect(responseJson.status).to.equal('Success');",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "authorization",
+						"value": "Basic THVsYTIyOjIyMDgxOTk3Mk1vbW8h"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"userName\": \"{{userName}}\",\n  \"password\": \"{{password}}!\"\n}"
+				},
+				"url": {
+					"raw": "https://bookstore.toolsqa.com/Account/v1/GenerateToken",
+					"protocol": "https",
+					"host": [
+						"bookstore",
+						"toolsqa",
+						"com"
+					],
+					"path": [
+						"Account",
+						"v1",
+						"GenerateToken"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Book Stoore",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// let response = pm.response.json();",
+							"// pm.environment.set('isbn', response.books[0].isbn);",
+							"",
+							"// res = pm.response.json();",
+							"// let isbn_len = res.books.length;",
+							"",
+							"// for (let i = 0; i < isbn_len; i++) {",
+							"//    { // Comparing with boolean true, not the string \"true\"",
+							"//     pm.environment.set('isbn', res.books[i].isbn);",
+							"//   } ",
+							"  ",
+							"// }",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "authorization",
+						"value": "Basic cm9zYW1lbmRyb2ZhMjM6MjIwODE5OTcyTW9tbyE="
+					},
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6InJvc2FtZW5kcm9mYTIzIiwicGFzc3dvcmQiOiIyMjA4MTk5NzJNb21vISIsImlhdCI6MTY5ODgyMDA4MH0._ry8Z--45lAJYB1mnE6clR7rHcqPPsHV9g9ssqCnSJk"
+					}
+				],
+				"url": {
+					"raw": "https://bookstore.toolsqa.com/BookStore/v1/Books",
+					"protocol": "https",
+					"host": [
+						"bookstore",
+						"toolsqa",
+						"com"
+					],
+					"path": [
+						"BookStore",
+						"v1",
+						"Books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Book Store",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();",
+							"pm.environment.set('isbn_deleted', response.books[0].isbn);",
+							"",
+							"pm.test(\"Verify status code 201\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    pm.response.to.have.status(201);",
+							"    ",
+							"  ",
+							"",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "authorization",
+						"value": "Basic cm9zYW1lbmRyb2ZhMjM6MjIwODE5OTcyTW9tbyE="
+					},
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6InJvc2FtZW5kcm9mYTIzIiwicGFzc3dvcmQiOiIyMjA4MTk5NzJNb21vISIsImlhdCI6MTY5ODgyMDA4MH0._ry8Z--45lAJYB1mnE6clR7rHcqPPsHV9g9ssqCnSJk"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"userId\": \"{{userID}}\",\n  \"collectionOfIsbns\": [\n    {\n      \"isbn\": \"{{isbn}}\"\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/BookStore/v1/Books",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"BookStore",
+						"v1",
+						"Books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Books",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verify status code 204\", function () {",
+							"    ",
+							"    pm.response.to.have.status(204);",
+							"    ",
+							"  ",
+							"",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "authorization",
+						"value": "Basic cm9zYW1lbmRyb2ZhMjM6MjIwODE5OTcyTW9tbyE="
+					},
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6InJvc2FtZW5kcm9mYTIzIiwicGFzc3dvcmQiOiIyMjA4MTk5NzJNb21vISIsImlhdCI6MTY5ODgyMDA4MH0._ry8Z--45lAJYB1mnE6clR7rHcqPPsHV9g9ssqCnSJk"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"isbn\": \"{{isbn_deleted}}\",\n  \"userId\": \"{{userID}}\"\n}"
+				},
+				"url": {
+					"raw": "https://bookstore.toolsqa.com/BookStore/v1/Book",
+					"protocol": "https",
+					"host": [
+						"bookstore",
+						"toolsqa",
+						"com"
+					],
+					"path": [
+						"BookStore",
+						"v1",
+						"Book"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"var arr = [\"9781449325862\",\"9781449331818\",\"9781449337711\",\"9781449365035\",\"9781491904244\",\"9781491950296\",\"9781593275846\",\"9781593277574\"];",
+					"var randomNumber = Math.floor(Math.random() * arr.length);",
+					"pm.variables.set(\"isbn\", arr[randomNumber]);"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "isbn",
+			"value": ""
+		}
+	]
+}
